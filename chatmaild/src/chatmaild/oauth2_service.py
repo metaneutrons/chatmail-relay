@@ -43,27 +43,17 @@ def init_oauth2(cfg):
     # Extract tenant ID from authorization endpoint
     tenant_id = cfg.oauth2_authorization_endpoint.split('/')[3]
     
-    # Build complete server metadata dict for authlib
-    server_metadata = {
-        'issuer': f'https://login.microsoftonline.com/{tenant_id}/v2.0',
-        'authorization_endpoint': cfg.oauth2_authorization_endpoint,
-        'token_endpoint': cfg.oauth2_token_endpoint,
-        'jwks_uri': f'https://login.microsoftonline.com/{tenant_id}/discovery/v2.0/keys',
-        'userinfo_endpoint': 'https://graph.microsoft.com/oidc/userinfo',
-        'token_endpoint_auth_methods_supported': ['client_secret_post', 'client_secret_basic'],
-    }
-    
-    # Register OAuth2 provider
+    # Register OAuth2 provider with explicit metadata dict
     oauth.register(
         name='provider',
         client_id=cfg.oauth2_client_id,
         client_secret=cfg.oauth2_client_secret,
-        server_metadata_url=None,
+        api_base_url='https://graph.microsoft.com/v1.0/',
+        access_token_url=cfg.oauth2_token_endpoint,
+        authorize_url=cfg.oauth2_authorization_endpoint,
         client_kwargs={'scope': 'openid email profile'},
+        jwks_uri=f'https://login.microsoftonline.com/{tenant_id}/discovery/v2.0/keys',
     )
-    
-    # Manually set the metadata
-    oauth.provider._server_metadata = server_metadata
 
 
 def generate_password(length=24):
