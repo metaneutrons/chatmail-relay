@@ -43,22 +43,27 @@ def init_oauth2(cfg):
     # Extract tenant ID from authorization endpoint
     tenant_id = cfg.oauth2_authorization_endpoint.split('/')[3]
     
-    # Register OAuth2 provider with full OpenID Connect metadata
+    # Build complete server metadata dict for authlib
+    server_metadata = {
+        'issuer': f'https://login.microsoftonline.com/{tenant_id}/v2.0',
+        'authorization_endpoint': cfg.oauth2_authorization_endpoint,
+        'token_endpoint': cfg.oauth2_token_endpoint,
+        'jwks_uri': f'https://login.microsoftonline.com/{tenant_id}/discovery/v2.0/keys',
+        'userinfo_endpoint': 'https://graph.microsoft.com/oidc/userinfo',
+        'token_endpoint_auth_methods_supported': ['client_secret_post', 'client_secret_basic'],
+    }
+    
+    # Register OAuth2 provider
     oauth.register(
         name='provider',
         client_id=cfg.oauth2_client_id,
         client_secret=cfg.oauth2_client_secret,
-        server_metadata_url=None,  # Don't use discovery
-        authorize_url=cfg.oauth2_authorization_endpoint,
-        access_token_url=cfg.oauth2_token_endpoint,
-        jwks_uri=f"https://login.microsoftonline.com/{tenant_id}/discovery/v2.0/keys",
-        userinfo_endpoint=f"https://graph.microsoft.com/oidc/userinfo",
-        token_endpoint_auth_method='client_secret_post',
-        client_kwargs={
-            'scope': 'openid email profile',
-            'token_endpoint_auth_method': 'client_secret_post',
-        },
+        server_metadata_url=None,
+        client_kwargs={'scope': 'openid email profile'},
     )
+    
+    # Manually set the metadata
+    oauth.provider._server_metadata = server_metadata
 
 
 def generate_password(length=24):
