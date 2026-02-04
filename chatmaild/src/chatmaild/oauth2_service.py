@@ -16,6 +16,7 @@ from pathlib import Path
 
 from flask import Flask, redirect, request, render_template, session, url_for
 from authlib.integrations.flask_client import OAuth
+from werkzeug.middleware.proxy_fix import ProxyFix
 import qrcode
 
 # Import chatmail modules
@@ -24,7 +25,10 @@ from chatmaild.config import read_config
 from chatmaild.doveauth import encrypt_password
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(32)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
+
+# Trust proxy headers (nginx sets X-Forwarded-* headers)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # Global config
 config = None
