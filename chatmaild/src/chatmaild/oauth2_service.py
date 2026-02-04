@@ -91,7 +91,7 @@ def oauth2_login():
     if not config.oauth2_enabled:
         return "OAuth2 authentication is not enabled", 503
     
-    redirect_uri = url_for('oauth2_callback', _external=True)
+    redirect_uri = url_for('oauth2_callback', _external=True, _scheme='https')
     return oauth.provider.authorize_redirect(redirect_uri)
 
 
