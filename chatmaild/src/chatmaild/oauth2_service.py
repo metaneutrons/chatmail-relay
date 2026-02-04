@@ -36,15 +36,14 @@ def init_oauth2(cfg):
     global oauth
     oauth = OAuth(app)
     
-    oauth2_config = {
-        'client_id': cfg.oauth2_client_id,
-        'client_secret': cfg.oauth2_client_secret,
-        'authorize_url': cfg.oauth2_authorization_endpoint,
-        'access_token_url': cfg.oauth2_token_endpoint,
-        'client_kwargs': {'scope': 'openid email profile'},
-    }
-    
-    oauth.register('provider', **oauth2_config)
+    # Register OAuth2 provider with proper configuration
+    oauth.register(
+        name='provider',
+        client_id=cfg.oauth2_client_id,
+        client_secret=cfg.oauth2_client_secret,
+        server_metadata_url=f"{cfg.oauth2_authorization_endpoint.rsplit('/oauth2', 1)[0]}/.well-known/openid-configuration",
+        client_kwargs={'scope': 'openid email profile'},
+    )
 
 
 def generate_password(length=24):
