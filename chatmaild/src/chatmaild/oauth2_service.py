@@ -20,8 +20,8 @@ import qrcode
 
 # Import chatmail modules
 sys.path.insert(0, str(Path(__file__).parent))
-from config import read_config
-from doveauth import encrypt_password
+from chatmaild.config import read_config
+from chatmaild.doveauth import encrypt_password
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
