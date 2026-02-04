@@ -10,7 +10,6 @@
 {{ mail_domain }}.                   MX 10 {{ mail_domain }}.
 _mta-sts.{{ mail_domain }}.          TXT "v=STSv1; id={{ sts_id }}"
 mta-sts.{{ mail_domain }}.           CNAME {{ mail_domain }}.
-www.{{ mail_domain }}.               CNAME {{ mail_domain }}.
 {{ dkim_entry }}
 
 ;

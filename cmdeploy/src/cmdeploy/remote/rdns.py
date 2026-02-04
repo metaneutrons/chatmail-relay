@@ -23,9 +23,8 @@ def perform_initial_checks(mail_domain, pre_command=""):
     A = query_dns("A", mail_domain)
     AAAA = query_dns("AAAA", mail_domain)
     MTA_STS = query_dns("CNAME", f"mta-sts.{mail_domain}")
-    WWW = query_dns("CNAME", f"www.{mail_domain}")
 
-    res = dict(mail_domain=mail_domain, A=A, AAAA=AAAA, MTA_STS=MTA_STS, WWW=WWW)
+    res = dict(mail_domain=mail_domain, A=A, AAAA=AAAA, MTA_STS=MTA_STS)
     res["acme_account_url"] = shell(
         pre_command + "acmetool account-url", fail_ok=True, print=log_progress
     )
@@ -33,7 +32,7 @@ def perform_initial_checks(mail_domain, pre_command=""):
         mail_domain, pre_command, dkim_selector="opendkim"
     )
 
-    if not MTA_STS or not WWW or (not A and not AAAA):
+    if not MTA_STS or (not A and not AAAA):
         return res
 
     # parse out sts-id if exists, example: "v=STSv1; id=2090123"
