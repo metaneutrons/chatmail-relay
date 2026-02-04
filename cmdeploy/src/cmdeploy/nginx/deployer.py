@@ -70,7 +70,11 @@ def _configure_nginx(config: Config, debug: bool = False) -> bool:
         user="root",
         group="root",
         mode="644",
-        config={"domain_name": config.mail_domain},
+        config={
+            "domain_name": config.mail_domain,
+            "oauth2_enabled": config.oauth2_enabled,
+            "oauth2_port": config.oauth2_port,
+        },
         disable_ipv6=config.disable_ipv6,
     )
     need_restart |= main_config.changed
