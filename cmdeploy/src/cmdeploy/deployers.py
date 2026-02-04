@@ -29,6 +29,7 @@ from .dovecot.deployer import DovecotDeployer
 from .filtermail.deployer import FiltermailDeployer
 from .mtail.deployer import MtailDeployer
 from .nginx.deployer import NginxDeployer
+from .oauth2.deployer import OAuth2Deployer
 from .opendkim.deployer import OpendkimDeployer
 from .postfix.deployer import PostfixDeployer
 from .www import build_webpages, find_merge_conflict, get_paths
@@ -606,6 +607,7 @@ def deploy_chatmail(config_path: Path, disable_mail: bool, website_only: bool) -
         DovecotDeployer(config, disable_mail),
         PostfixDeployer(config, disable_mail),
         FcgiwrapDeployer(),
+        OAuth2Deployer(config),
         NginxDeployer(config),
         MtailDeployer(config.mtail_address),
         GithashDeployer(),

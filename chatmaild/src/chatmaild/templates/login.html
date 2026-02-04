@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - {{ domain }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 { color: #333; }
+        .login-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #0078d4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .login-btn:hover {
+            background: #005a9e;
+        }
+        .info {
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ domain }}</h1>
+    <p>Create or reset your chatmail account</p>
+    
+    <a href="/oauth2-login" class="login-btn">
+        Login with {{ provider_name }}
+    </a>
+    
+    <div class="info">
+        <p>You will be redirected to {{ provider_name }} to verify your identity.</p>
+        <p>Your chatmail account will be created automatically.</p>
+    </div>
+</body>
+</html>

@@ -57,6 +57,17 @@ class Config:
         self.privacy_pdo = params.get("privacy_pdo")
         self.privacy_supervisor = params.get("privacy_supervisor")
 
+        # OAuth2 settings
+        self.oauth2_enabled = params.get("oauth2_enabled", "false").lower() == "true"
+        self.oauth2_provider_name = params.get("oauth2_provider_name", "OAuth2 Provider")
+        self.oauth2_client_id = params.get("oauth2_client_id", "")
+        self.oauth2_client_secret = params.get("oauth2_client_secret", "")
+        self.oauth2_authorization_endpoint = params.get("oauth2_authorization_endpoint", "")
+        self.oauth2_token_endpoint = params.get("oauth2_token_endpoint", "")
+        self.oauth2_email_claim = params.get("oauth2_email_claim", "email")
+        self.oauth2_allowed_domains = [d.strip() for d in params.get("oauth2_allowed_domains", "").split(",") if d.strip()]
+        self.oauth2_port = int(params.get("oauth2_port", "8080"))
+
         # deprecated option
         mbdir = params.get("mailboxes_dir", f"/home/vmail/mail/{self.mail_domain}")
         self.mailboxes_dir = Path(mbdir.strip())

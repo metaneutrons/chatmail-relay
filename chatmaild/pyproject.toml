@@ -27,6 +27,7 @@ chatmail-metadata = "chatmaild.metadata:main"
 chatmail-metrics = "chatmaild.metrics:main"
 chatmail-expire = "chatmaild.expire:main"
 chatmail-fsreport = "chatmaild.fsreport:main"
+chatmail-oauth2 = "chatmaild.oauth2_service:main"
 lastlogin = "chatmaild.lastlogin:main"
 turnserver = "chatmaild.turnserver:main"
 

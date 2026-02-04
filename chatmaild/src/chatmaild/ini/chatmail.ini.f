@@ -124,3 +124,43 @@ privacy_pdo =
 
 # postal address of the privacy supervisor
 privacy_supervisor =
+
+
+#
+# OAuth2 Authentication (Optional)
+#
+
+# Enable OAuth2-based account creation
+# When enabled, users can create accounts by authenticating with their company OAuth2 provider
+# Recommended: Create /etc/chatmail-nocreate to disable standard instant onboarding
+oauth2_enabled = false
+
+# Display name for the OAuth2 provider (e.g., "Microsoft 365", "Google Workspace")
+oauth2_provider_name = Microsoft 365
+
+# OAuth2 client credentials (obtain from your OAuth2 provider)
+oauth2_client_id = 
+oauth2_client_secret = 
+
+# OAuth2 endpoints (provider-specific)
+# Microsoft 365 example:
+#   oauth2_authorization_endpoint = https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+#   oauth2_token_endpoint = https://login.microsoftonline.com/common/oauth2/v2.0/token
+# Google example:
+#   oauth2_authorization_endpoint = https://accounts.google.com/o/oauth2/v2/auth
+#   oauth2_token_endpoint = https://oauth2.googleapis.com/token
+oauth2_authorization_endpoint = 
+oauth2_token_endpoint = 
+
+# Claim name in OAuth2 token that contains the user's email address
+# Microsoft: "preferred_username" or "email"
+# Google: "email"
+oauth2_email_claim = preferred_username
+
+# Comma-separated list of allowed email domains
+# Only users with emails from these domains can create accounts
+# Example: lexict.de,example.com
+oauth2_allowed_domains = 
+
+# Port for OAuth2 web service (internal, proxied by nginx)
+oauth2_port = 8080
