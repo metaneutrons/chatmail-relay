@@ -68,8 +68,8 @@ def init_oauth2(cfg):
 
 
 def generate_password(length=24):
-    """Generate a secure random password."""
-    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*'
+    """Generate a secure random password (alphanumeric only for QR code compatibility)."""
+    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
 
@@ -146,9 +146,8 @@ def oauth2_callback():
         # Create or reset account
         create_or_reset_account(chatmail_address, password)
         
-        # Generate QR code for DeltaChat (URL encode password for special chars)
-        from urllib.parse import quote
-        qr_data = f"DCACCOUNT:{chatmail_address}:{quote(password, safe='')}"
+        # Generate QR code for DeltaChat (simple format, no URL encoding needed for alphanumeric)
+        qr_data = f"DCACCOUNT:{chatmail_address}:{password}"
         qr_code = generate_qr_code(qr_data)
         
         return render_template('success.html',
