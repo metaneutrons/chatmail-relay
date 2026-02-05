@@ -43,25 +43,25 @@ def init_oauth2(cfg):
     # Extract tenant ID from authorization endpoint
     tenant_id = cfg.oauth2_authorization_endpoint.split('/')[3]
     
-    # Fetch metadata manually to ensure it's available
+    # Fetch metadata manually
     import requests
     discovery_url = f'https://login.microsoftonline.com/{tenant_id}/v2.0/.well-known/openid-configuration'
     metadata = requests.get(discovery_url).json()
     
-    # Register with fetched metadata
+    # Register OAuth2 provider
     oauth.register(
         name='provider',
         client_id=cfg.oauth2_client_id,
         client_secret=cfg.oauth2_client_secret,
-        server_metadata_url=None,  # Don't auto-fetch
-        authorize_url=metadata['authorization_endpoint'],
-        access_token_url=metadata['token_endpoint'],
-        jwks_uri=metadata['jwks_uri'],
+        server_metadata_url=None,
         client_kwargs={'scope': 'openid email profile'},
     )
     
-    # Manually set the full metadata
-    oauth.provider.load_server_metadata = lambda: metadata
+    # Directly set the server metadata on the client
+    # This is what authlib's load_server_metadata() returns
+    oauth.provider._server_metadata = metadata
+    oauth.provider.authorize_url = metadata['authorization_endpoint']
+    oauth.provider.access_token_url = metadata['token_endpoint']
 
 
 def generate_password(length=24):
