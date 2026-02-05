@@ -57,9 +57,9 @@ def init_oauth2(cfg):
         client_kwargs={'scope': 'openid email profile'},
     )
     
-    # Directly set the server metadata on the client
-    # This is what authlib's load_server_metadata() returns
-    oauth.provider._server_metadata = metadata
+    # Update server_metadata (not _server_metadata!)
+    # This is what load_server_metadata() returns
+    oauth.provider.server_metadata.update(metadata)
     oauth.provider.authorize_url = metadata['authorization_endpoint']
     oauth.provider.access_token_url = metadata['token_endpoint']
 
