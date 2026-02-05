@@ -43,17 +43,25 @@ def init_oauth2(cfg):
     # Extract tenant ID from authorization endpoint
     tenant_id = cfg.oauth2_authorization_endpoint.split('/')[3]
     
-    # Use OpenID Connect discovery - this is the proper way
-    # Microsoft's discovery endpoint provides all metadata including jwks_uri
+    # Fetch metadata manually to ensure it's available
+    import requests
     discovery_url = f'https://login.microsoftonline.com/{tenant_id}/v2.0/.well-known/openid-configuration'
+    metadata = requests.get(discovery_url).json()
     
+    # Register with fetched metadata
     oauth.register(
         name='provider',
         client_id=cfg.oauth2_client_id,
         client_secret=cfg.oauth2_client_secret,
-        server_metadata_url=discovery_url,
+        server_metadata_url=None,  # Don't auto-fetch
+        authorize_url=metadata['authorization_endpoint'],
+        access_token_url=metadata['token_endpoint'],
+        jwks_uri=metadata['jwks_uri'],
         client_kwargs={'scope': 'openid email profile'},
     )
+    
+    # Manually set the full metadata
+    oauth.provider.load_server_metadata = lambda: metadata
 
 
 def generate_password(length=24):
