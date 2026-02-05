@@ -146,8 +146,9 @@ def oauth2_callback():
         # Create or reset account
         create_or_reset_account(chatmail_address, password)
         
-        # Generate QR code for DeltaChat
-        qr_data = f"DCACCOUNT:{chatmail_address}:{password}"
+        # Generate QR code for DeltaChat (URL encode password for special chars)
+        from urllib.parse import quote
+        qr_data = f"DCACCOUNT:{chatmail_address}:{quote(password, safe='')}"
         qr_code = generate_qr_code(qr_data)
         
         return render_template('success.html',
