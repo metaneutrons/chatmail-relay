@@ -46,7 +46,9 @@ def init_oauth2(cfg):
     # Fetch metadata manually
     import requests
     discovery_url = f'https://login.microsoftonline.com/{tenant_id}/v2.0/.well-known/openid-configuration'
+    logging.info(f"Fetching OAuth2 metadata from: {discovery_url}")
     metadata = requests.get(discovery_url).json()
+    logging.info(f"Metadata fetched, jwks_uri: {metadata.get('jwks_uri')}")
     
     # Register OAuth2 provider
     oauth.register(
@@ -62,6 +64,7 @@ def init_oauth2(cfg):
     oauth.provider.server_metadata.update(metadata)
     oauth.provider.authorize_url = metadata['authorization_endpoint']
     oauth.provider.access_token_url = metadata['token_endpoint']
+    logging.info(f"OAuth2 initialized, server_metadata has jwks_uri: {oauth.provider.server_metadata.get('jwks_uri')}")
 
 
 def generate_password(length=24):
