@@ -165,6 +165,9 @@ def main():
     """Run the OAuth2 service."""
     global config
     
+    # Configure logging first
+    logging.basicConfig(level=logging.INFO)
+    
     if len(sys.argv) != 2:
         print("Usage: oauth2_service.py <chatmail.ini>")
         sys.exit(1)
@@ -185,5 +188,4 @@ def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
     main()
